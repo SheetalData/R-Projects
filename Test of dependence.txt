@@ -1,0 +1,67 @@
+install.packages("ggplot2")
+library(ggplot2)
+qplot(salary, gender, data = employee_survey, main = "gender vs salary")
+
+#AGE
+attach(employee_survey)
+age.thresholds<-c(0,27,40,65)
+age.labels<-c('young','middle','older')
+# determine categories
+employee_survey$age.categories<-cut(age,breaks=
+                                      age.thresholds,labels=age.labels,right=T)
+# show data
+View(employee_survey)
+# assess result
+class(employee_survey$age.categories)
+unclass(employee_survey$age.categories)
+# show original variables and category side by side
+cbind(age,employee_survey$age.categories)
+
+#SALARY
+attach(employee_survey)
+salary.thresholds<-c(0,1500,2500,4000)
+salary.labels<-c('low','middle','high')
+# determine categories
+employee_survey$salary.categories<-cut(salary,breaks=
+                                      salary.thresholds,labels=salary.labels,right=T)
+# show data
+View(employee_survey)
+# assess result
+class(employee_survey$salary.categories)
+unclass(employee_survey$salary.categories)
+# show original variables and category side by side
+cbind(salary,employee_survey$salary.categories)
+
+
+#T test
+#t.test(y~x,paired=FALSE,var.equal=TRUE) # where y is numeric & x is a binary factor
+#.test(y1,y2,paired=FALSE,var.equal=TRUE) # where y1 and y2 are numeric
+#ndependent 2-group t-test / Two sample assuming unequal variances. The command will be:
+  
+# t.test(y~x,paired=FALSE,var.equal=FALSE) # where y is numeric & x is a binary factor
+#.test(y1,y2,paired=FALSE,var.equal=FALSE) # where y1 and y2 are numeric
+#pired t-test. The command will be:
+  
+# t.test(y1,y2,paired=TRUE) # where y1 & y2 are numeric
+
+
+#CHISQUARE
+test <- chisq.test(table(employee_survey$age.categories,employee_survey$gender))
+test
+
+t.test(employee_survey$gender~ employee_survey$age.categories,paired=FALSE,var.equal=FALSE)
+
+#Cramers V
+test1<- chisq.test(table(employee_survey$salary.categories,employee_survey$gender))
+test1
+install.packages("vcd")
+library(vcd)
+
+assocstats(table(employee_survey$salary.categories,employee_survey$gender))
+
+
+#t test
+t.test(employee_survey$age~employee_survey$gender,paired=FALSE,var.equal=FALSE)
+t.test(employee_survey$salary~employee_survey$gender,paired=FALSE,var.equal=FALSE)
+t.test(employee_survey$motivation~employee_survey$gender,paired=FALSE,var.equal=FALSE)
+
